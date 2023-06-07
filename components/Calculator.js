@@ -1,40 +1,54 @@
 import React, { useState } from 'react';
 
 const Calculator = () => {
-    // TODO: start coding here!
-    const [bill, setBill] = useState(0)
-    const [tip, setTip] = useState(0)
-    const [people, setPeople] = useState(1)
+    const [formData, setFormData] = useState({
+        bill: "",
+        tip: "",
+        people: ""
+    })
+    const [selectedTip, setSelectedTip] = useState(null);
 
-    const handleBill = (e) => {
-        if (e.target.value >= 0) {
-            setBill(e.target.value)
+    const handleChange = (e) => {
+        const { name, value, id } = e.target
+        if (name === "tip") {
+            setSelectedTip(value)
+            setFormData({
+                ...formData,
+                [name]: value >= 0 ? value : ""
+            })
         }
-    }
-
-    const handleTip = (e) => {
-        if (e.target.value >= 0) {
-            setTip(e.target.value)
+        if (id === "customTip") {
+            setSelectedTip(null)
+            setFormData({
+                ...formData,
+                [name]: value >= 0 ? value : ""
+            })
         }
-    }
-
-    const handlePeople = (e) => {
-        if (e.target.value >= 1) {
-            setPeople(e.target.value)
+        if (name === "people") {
+            const peopleValue = value >= 1 ? value : 1
+            setFormData({
+                ...formData,
+                [name]: peopleValue
+            })
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value >= 0 ? value : ""
+            })
         }
     }
 
     const handleReset = () => {
-        setBill(0)
-        setTip(0)
-        setPeople(1)
+        setFormData({
+            bill: "",
+            tip: "",
+            people: ""
+        })
     }
 
-    const totalTip = parseFloat(bill) * (parseFloat(tip) / 100);
-    const totalWithTip = (parseFloat(bill) + parseFloat(totalTip)) / parseInt(people);
-    const tipPerPerson = parseFloat(totalTip) / parseInt(people);
-
-
+    const totalTip = parseFloat(formData.bill) * (parseFloat(formData.tip) / 100);
+    const totalWithTip = (parseFloat(formData.bill) + parseFloat(totalTip)) / parseInt(formData.people);
+    const tipPerPerson = parseFloat(totalTip) / parseInt(formData.people);
 
     return (
         <main>
@@ -54,10 +68,10 @@ const Calculator = () => {
                             type="number"
                             className="body-l-text input-field"
                             placeholder="0"
-                            name="Total bill value"
+                            name="bill"
                             id="totalBill"
-                            value={bill}
-                            onChange={handleBill}
+                            value={formData.bill}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -71,39 +85,46 @@ const Calculator = () => {
                             <button
                                 className="body-l-text input-tip"
                                 id="tip5"
+                                name="tip"
                                 value={5}
-                                onClick={handleTip}>5%
+                                onClick={handleChange}>5%
                             </button>
                             <button
                                 className="body-l-text input-tip"
                                 id="tip10"
+                                name="tip"
                                 value={10}
-                                onClick={handleTip}>10%
+                                onClick={handleChange}>10%
                             </button>
                             <button
                                 className="body-l-text input-tip"
                                 id="tip15"
+                                name="tip"
                                 value={15}
-                                onClick={handleTip}>15%
+                                onClick={handleChange}>15%
                             </button>
                             <button
                                 className="body-l-text input-tip"
                                 id="tip25"
+                                name="tip"
                                 value={25}
-                                onClick={handleTip}>25%
+                                onClick={handleChange}>25%
                             </button>
                             <button
                                 className="body-l-text input-tip"
-                                id="tip50" value={50}
-                                onClick={handleTip}>50%
+                                id="tip50"
+                                name="tip"
+                                value={50}
+                                onClick={handleChange}>50%
                             </button>
                             <input
                                 type="number"
                                 className="body-l-text input-field"
                                 placeholder="Custom"
-                                id="totalTipPercentage"
-                                value={tip}
-                                onChange={handleTip}></input>
+                                name="tip"
+                                id="customTip"
+                                value={selectedTip === null ? formData.tip : ""}
+                                onChange={handleChange}></input>
                         </div>
                     </div>
 
@@ -116,11 +137,11 @@ const Calculator = () => {
                         <input
                             type="number"
                             className="body-l-text input-field"
-                            placeholder="0"
-                            name="Number of people"
+                            placeholder="1"
+                            name="people"
                             id="numberOfPeople"
-                            value={people}
-                            onChange={handlePeople}
+                            value={formData.people}
+                            onChange={handleChange}
                         />
                     </div>
                 </div>
