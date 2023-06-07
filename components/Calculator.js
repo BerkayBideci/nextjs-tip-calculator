@@ -25,7 +25,7 @@ const Calculator = () => {
             })
         }
         if (name === "people") {
-            const peopleValue = value >= 1 ? value : 1
+            const peopleValue = value >= 1 ? value : ""
             setFormData({
                 ...formData,
                 [name]: peopleValue
